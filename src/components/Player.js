@@ -8,7 +8,7 @@ class Player extends Component {
   render() {
     return (
       <div>
-        <h1>{this.props.name}</h1>
+        <h1>{`Player ${this.props.name}`}</h1>
         <div>Lives: {this.props.lives}</div>
         <button>+</button>
         <button>-</button>

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import GameForm from "./GameForm";
 import Player from "./Player";
-const _ = require("lodash");
+// const _ = require("lodash");
 
 class GameBoard extends Component {
   constructor(props) {
@@ -13,8 +13,8 @@ class GameBoard extends Component {
     // this.allPlayers = this.allPlayers.bind(this);
   }
 
-  create(newGameDetails) {
-    this.setState({ game: newGameDetails });
+  create(playerData) {
+    this.setState({ game: [playerData] });
   }
 
   //   allPlayers(player) {
@@ -42,21 +42,50 @@ class GameBoard extends Component {
   //     }
   //   }
   render() {
-    const game = this.state.game;
-    const players = game.players;
-    const allPlayers = _.map(players, (player, i) => {
-      //     this.state.game, (e) => {
-      //   e.players.map((player) => {
-      return (
-        <Player
-          lives={player.lives}
-          key={i}
-          id={player.id}
-          name={player.name}
-          gameOver={player.gameOver}
-        />
-      );
+    // const game = this.state.game;
+    // const mapPlayers = game.players;
+    // const allPlayers = _.map(mapPlayers, (p, i) => {
+    //   console.log(mapPlayers);
+    //   return (
+    //     <Player
+    //       lives={mapPlayers[i].lives}
+    //       key={mapPlayers[i].id}
+    //       id={mapPlayers[i].id}
+    //       name={mapPlayers[i].name}
+    //       gameOver={mapPlayers[i].gameOver}
+    //     />);
+
+    const players = this.state.game.map((p) => {
+      return p.allPlayers.map((player) => {
+        console.log(player);
+        return (
+          <Player
+            key={player.id}
+            id={player.id}
+            name={player.name}
+            lives={player.lives}
+          />
+        );
+      });
     });
+
+    //     this.state.game, (e) => {
+    //   e.players.map((player) => {
+    //
+    //  console.log(`mapPlayers ${mapPlayers}`);
+    //   return _.map(p, (i) => {
+    //     console.log(p);
+    //     return (
+    //       <Player
+    //         lives={p.lives}
+    //         key={i}
+    //         id={p.id}
+    //         name={p.name}
+    //         gameOver={p.gameOver}
+    //       />
+    //     );
+    //   });
+    // });
 
     // const allPlayers = this.state.game.map((p, index) => {
     //   this.return(
@@ -104,7 +133,7 @@ class GameBoard extends Component {
       <div>
         <GameForm createGame={this.create} />
 
-        <div className="Players">{allPlayers}</div>
+        <div className="Players">{players}</div>
         <button>Rematch</button>
         <button>New Battle</button>
         <a

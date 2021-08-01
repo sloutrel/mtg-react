@@ -6,12 +6,12 @@ class GameForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      players: [
-        { name: "Player1", lives: 20, id: 1, gameOver: false },
-        { name: "Player2", lives: 20, id: 2, gameOver: false },
-      ],
+      //   players: [
+      //     { name: "Player1", lives: 20, gameOver: false },
+      //     { name: "Player2", lives: 20, gameOver: false },
+      //   ],
       playerCount: 2,
-      lives: 20,
+      startLives: 20,
       isEditing: true,
     };
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -20,21 +20,40 @@ class GameForm extends Component {
 
   handleSubmit(evt) {
     evt.preventDefault();
-    if (this.state.playerCount > 2) {
-      let playerNames = [];
-      let players = rangeInclusive(1, this.state.playerCount, 1);
-      for (let i = 0; i < players.length; i++) {
-        let playerData = `name: "Player${players[i]}", lives: ${
-          this.state.lives
-        }, id: ${uuidv4()}, gameOver: ${false}`;
-        playerNames.push({ playerData });
-      }
-      this.setState({
-        players: [...playerNames],
+    const allPlayers = [];
+    const playerNum = rangeInclusive(1, this.state.playerCount, 1);
+    for (let i = 0; i < playerNum.length; i++) {
+      allPlayers.push({
+        name: playerNum[i],
+        id: uuidv4(),
+        gameOver: false,
+        lives: this.state.startLives,
       });
     }
+    this.props.createGame({
+      ...this.state,
+      allPlayers,
+    });
+
+    // if (this.state.playerCount > 2) {
+    //     let players = [];
+    //   let playerNum = rangeInclusive(1, this.state.playerCount, 1);
+    //   for (let i = 0; i < playerNum.length; i++) {
+    //     let player = playerNum[i];
+    //     let playerData = `name: "Player${players[i]}", lives: ${
+    //       this.state.lives
+    //     }, id: ${uuidv4()}, gameOver: ${false}`;
+    //     players.push({ player });
+    //   }
+    //   console.log(players);
+    //   console.log(this.state);
+    //   this.setState({
+    //     players,
+    //     // players: playerData, id: uuidv4(), gameOver: false, lives: this.state.lives
+    //   });
+
     this.handleEdit();
-    this.props.createGame({ ...this.state });
+    // this.props.createGame({ ...this.state });
   }
 
   handleEdit() {
@@ -64,9 +83,9 @@ class GameForm extends Component {
               max="40"
               min="10"
               step="10"
-              value={this.state.lives}
+              value={this.state.startLives}
               onChange={(e) => {
-                this.setState({ lives: e.target.value });
+                this.setState({ startLives: e.target.value });
               }}
             ></input>
           </label>
