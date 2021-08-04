@@ -3,13 +3,17 @@ import { v4 as uuidv4 } from "uuid";
 const rangeInclusive = require("range-inclusive");
 
 class GameForm extends Component {
+  static defaultProps = {
+    difficulty: {
+      10: "Sudden Death",
+      20: "Standard Mode",
+      30: "Longevity Mode",
+      40: "N00b",
+    },
+  };
   constructor(props) {
     super(props);
     this.state = {
-      //   players: [
-      //     { name: "Player1", lives: 20, gameOver: false },
-      //     { name: "Player2", lives: 20, gameOver: false },
-      //   ],
       playerCount: 2,
       startLives: 20,
       isEditing: true,
@@ -31,29 +35,9 @@ class GameForm extends Component {
       });
     }
     this.props.createGame({
-      ...this.state,
       allPlayers,
     });
-
-    // if (this.state.playerCount > 2) {
-    //     let players = [];
-    //   let playerNum = rangeInclusive(1, this.state.playerCount, 1);
-    //   for (let i = 0; i < playerNum.length; i++) {
-    //     let player = playerNum[i];
-    //     let playerData = `name: "Player${players[i]}", lives: ${
-    //       this.state.lives
-    //     }, id: ${uuidv4()}, gameOver: ${false}`;
-    //     players.push({ player });
-    //   }
-    //   console.log(players);
-    //   console.log(this.state);
-    //   this.setState({
-    //     players,
-    //     // players: playerData, id: uuidv4(), gameOver: false, lives: this.state.lives
-    //   });
-
     this.handleEdit();
-    // this.props.createGame({ ...this.state });
   }
 
   handleEdit() {
@@ -93,7 +77,14 @@ class GameForm extends Component {
         </form>
       );
     } else {
-      result = <button onClick={this.handleEdit}>Game Details</button>;
+      // const lifeNum = this.state.startLives;
+      // const quoteNum = this.props.difficulty;
+      // const diffQuote = [];
+
+      // if (lifeNum === quoteNum.lifeNum) {
+      //   diffQuote.push(lifeNum);
+      // }
+      result = <button onClick={this.handleEdit}>Game Details </button>;
     }
     return result;
   }

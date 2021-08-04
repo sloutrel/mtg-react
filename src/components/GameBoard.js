@@ -1,137 +1,176 @@
 import React, { Component } from "react";
 import GameForm from "./GameForm";
 import Player from "./Player";
-// const _ = require("lodash");
 
 class GameBoard extends Component {
+  static defaultProps = {
+    loser: [
+      "Total Annihilation",
+      "Utter Defeat",
+      "Conquered",
+      "Bloodbath",
+      "It was a Massacre",
+    ],
+    winner: [
+      "Always Victorious",
+      "Glorified Victory",
+      "Triumphant Conquest",
+      "Enemies Vanquished",
+      "Rejoice in Your Glory",
+    ],
+  };
   constructor(props) {
     super(props);
     this.state = {
       game: [],
+      losers: 0,
     };
     this.create = this.create.bind(this);
-    // this.allPlayers = this.allPlayers.bind(this);
+    this.lifeUp = this.lifeUp.bind(this);
+    this.lifeDown = this.lifeDown.bind(this);
   }
 
   create(playerData) {
-    this.setState({ game: [playerData] });
+    const allPlayers = playerData.allPlayers;
+    this.setState({ game: [...allPlayers] });
   }
 
-  //   allPlayers(player) {
-  //     <Player
-  //       lives={players[key].lives}
-  //       key={players[key].id}
-  //       id={players[key].id}
-  //       name={players[key].name}
-  //     />;
-  //   }
+  // winner() {
+  //   const game = this.state.game;
+  //   const winner = [];
+  //   for (let i = 0; i < game.length; i++) {
+  //     if (!game[i].gameOver) {
+  //       winner.push(game[i].id);
 
-  //     const gameSetup = this.state.game;
-  //     const players = gameSetup.players;
-  //     for (let key in players) {
-  //       if (players.hasOwnProperty(key)) {
-  //         return (
-  //           <Player
-  //             lives={players[key].lives}
-  //             key={players[key].id}
-  //             id={players[key].id}
-  //             name={players[key].name}
-  //           />
-  //         );
+  //       if (winner.length === 1) {
+  //         let quote = this.choice(this.props.winner);
+  //         this.setState({ ...game[i], quote: quote });
   //       }
   //     }
   //   }
-  render() {
-    // const game = this.state.game;
-    // const mapPlayers = game.players;
-    // const allPlayers = _.map(mapPlayers, (p, i) => {
-    //   console.log(mapPlayers);
-    //   return (
-    //     <Player
-    //       lives={mapPlayers[i].lives}
-    //       key={mapPlayers[i].id}
-    //       id={mapPlayers[i].id}
-    //       name={mapPlayers[i].name}
-    //       gameOver={mapPlayers[i].gameOver}
-    //     />);
+  //   console.log(`winArr ${winner}`);
+  // }
+  loser(id, lives) {
+    console.log(this.state.losers);
+    const total = [];
+    const allLosers = this.state.game.map((player) => {
+      if (player.id === id && player.lives === 0) {
+        total.push(player.id);
+      }
 
-    const players = this.state.game.map((p) => {
-      return p.allPlayers.map((player) => {
-        console.log(player);
-        return (
-          <Player
-            key={player.id}
-            id={player.id}
-            name={player.name}
-            lives={player.lives}
-          />
-        );
-      });
+      return total;
     });
 
-    //     this.state.game, (e) => {
-    //   e.players.map((player) => {
-    //
-    //  console.log(`mapPlayers ${mapPlayers}`);
-    //   return _.map(p, (i) => {
-    //     console.log(p);
-    //     return (
-    //       <Player
-    //         lives={p.lives}
-    //         key={i}
-    //         id={p.id}
-    //         name={p.name}
-    //         gameOver={p.gameOver}
-    //       />
-    //     );
-    //   });
-    // });
+    // console.log(`total ${[...total]}`);
+    const curLosers = this.state.losers;
+    console.log(`allLosers ${allLosers.length}`);
+    console.log(`curLosers ${curLosers}`);
+    let all = curLosers + allLosers.length;
+    this.setState({ losers: all }, () => {
+      // console.log(this.state.losers.length);
+      this.isGameOver();
+    });
+  }
 
-    // const allPlayers = this.state.game.map((p, index) => {
-    //   this.return(
-    //     <div key={index}>
-    //       {p.players.map((player, i) => (
-    //         <Player
-    //           lives={player.lives}
-    //           key={player.id}
-    //           id={player.id}
-    //           name={player.name}
-    //         />
-    //       ))}
-    //     </div>
-    //   );
-    // });
-    // const allPlayers = this.state.game.map((p) => {
-    //   const player = this.state.players[p];
+  isGameOver() {
+    console.log(`slength ${this.state.losers.length}`);
+    // console.log(this.state.losers);
 
-    //   return (
-    //     <Player
-    //       lives={player.lives}
-    //       key={p}
-    //       id={player.id}
-    //       name={player.name}
-    //     />
-    //   );
-    // });
+    // console.log(this.state.game.length - 1);
 
-    // let allPlayers = Object.keys(this.state.game).map((playerKey, i) => {
-    //   const playerData = this.state.game[playerKey].players;
+    if (
+      parseInt(this.state.losers.length) ===
+      parseInt(this.state.game.length) - 1
+    ) {
+      // console.log("post loser");
+      this.winner();
+    }
+  }
 
-    //   return Object.keys(playerData).map((player) => {
-    //     return (
-    //       <Player
-    //         key={player.id}
-    //         id={player.id}
-    //         name={player.name}
-    //         lives={player.lives}
-    //       />
-    //     );
-    //   });
-    // });
+  winner(id) {
+    console.log(`losers ${this.state.losers.length}`);
+    const game = this.state.game;
+    const win = game.map((player) => {
+      for (let i = 0; i < this.state.loser.length; i++) {
+        if (player.id === id) {
+          if (player.id !== this.state.loser[i]) {
+            let quote = this.choice(this.props.winner);
+            return { ...player, quote: quote, gameOver: true };
+          }
+        }
+      }
+
+      // if (!player.gameOver) {
+      //   let quote = this.choice(this.props.winner);
+      //   return { ...player, quote: quote, gameOver: true };
+      // }
+      return player;
+    });
+
+    this.setState({ game: win });
+  }
+
+  choice(arr) {
+    let randomIndex = Math.floor(Math.random() * arr.length);
+    return arr[randomIndex];
+  }
+
+  lifeUp(id, lives) {
+    const up = this.state.game.map((player) => {
+      if (player.id === id) {
+        parseInt(lives);
+        lives = lives + 1;
+        return { ...player, lives: lives };
+      }
+      return player;
+    });
+    this.setState({ game: up });
+  }
+
+  lifeDown(id, lives) {
+    console.log(this.state.losers);
+    // const losers = [];
+    const down = this.state.game.map((player) => {
+      if (player.id === id) {
+        if (lives > 1) {
+          lives = lives - 1;
+          return { ...player, lives: lives };
+        } else if (lives === 1) {
+          lives = lives - 1;
+          let quote = this.choice(this.props.loser);
+          return { ...player, lives: lives, gameOver: true, quote: quote };
+        }
+      }
+      return player;
+    });
+    // if (losers.length === this.state.game.length - 1) {
+    //   this.winner(id);
+    // }
+    this.setState({ game: down }, (id, lives) => {
+      this.loser(id, lives);
+    });
+    // this.winner(id, lives);
+  }
+
+  render() {
+    const players = this.state.game.map((player) => {
+      return (
+        <Player
+          key={player.id}
+          id={player.id}
+          name={player.name}
+          lives={player.lives}
+          quote={player.quote}
+          gameOver={player.gameOver}
+          playerUp={this.lifeUp}
+          playerDown={this.lifeDown}
+        />
+      );
+    });
 
     return (
       <div>
-        <GameForm createGame={this.create} />
+        <GameForm createGame={this.create} level={this.props.difficulty} />
 
         <div className="Players">{players}</div>
         <button>Rematch</button>
