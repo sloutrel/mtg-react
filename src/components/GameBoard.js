@@ -31,83 +31,9 @@ class GameBoard extends Component {
   }
 
   create(playerData) {
+    console.log(`create ${JSON.stringify(this.state)}`);
     const allPlayers = playerData.allPlayers;
     this.setState({ game: [...allPlayers] });
-  }
-
-  // winner() {
-  //   const game = this.state.game;
-  //   const winner = [];
-  //   for (let i = 0; i < game.length; i++) {
-  //     if (!game[i].gameOver) {
-  //       winner.push(game[i].id);
-
-  //       if (winner.length === 1) {
-  //         let quote = this.choice(this.props.winner);
-  //         this.setState({ ...game[i], quote: quote });
-  //       }
-  //     }
-  //   }
-  //   console.log(`winArr ${winner}`);
-  // }
-  loser(id, lives) {
-    console.log(this.state.losers);
-    const total = [];
-    const allLosers = this.state.game.map((player) => {
-      if (player.id === id && player.lives === 0) {
-        total.push(player.id);
-      }
-
-      return total;
-    });
-
-    // console.log(`total ${[...total]}`);
-    const curLosers = this.state.losers;
-    console.log(`allLosers ${allLosers.length}`);
-    console.log(`curLosers ${curLosers}`);
-    let all = curLosers + allLosers.length;
-    this.setState({ losers: all }, () => {
-      // console.log(this.state.losers.length);
-      this.isGameOver();
-    });
-  }
-
-  isGameOver() {
-    console.log(`slength ${this.state.losers.length}`);
-    // console.log(this.state.losers);
-
-    // console.log(this.state.game.length - 1);
-
-    if (
-      parseInt(this.state.losers.length) ===
-      parseInt(this.state.game.length) - 1
-    ) {
-      // console.log("post loser");
-      this.winner();
-    }
-  }
-
-  winner(id) {
-    console.log(`losers ${this.state.losers.length}`);
-    const game = this.state.game;
-    const win = game.map((player) => {
-      for (let i = 0; i < this.state.loser.length; i++) {
-        if (player.id === id) {
-          if (player.id !== this.state.loser[i]) {
-            let quote = this.choice(this.props.winner);
-            return { ...player, quote: quote, gameOver: true };
-          }
-        }
-      }
-
-      // if (!player.gameOver) {
-      //   let quote = this.choice(this.props.winner);
-      //   return { ...player, quote: quote, gameOver: true };
-      // }
-      return player;
-    });
-
-    this.setState({ game: win });
   }
 
   choice(arr) {
@@ -118,9 +44,9 @@ class GameBoard extends Component {
   lifeUp(id, lives) {
     const up = this.state.game.map((player) => {
       if (player.id === id) {
-        parseInt(lives);
-        lives = lives + 1;
-        return { ...player, lives: lives };
+        let oneMoreLife = parseInt(lives);
+        oneMoreLife = oneMoreLife + 1;
+        return { ...player, lives: oneMoreLife };
       }
       return player;
     });
@@ -128,8 +54,8 @@ class GameBoard extends Component {
   }
 
   lifeDown(id, lives) {
-    console.log(this.state.losers);
-    // const losers = [];
+    console.log(`preDown ${JSON.stringify(this.state)}`);
+    let losers = "";
     const down = this.state.game.map((player) => {
       if (player.id === id) {
         if (lives > 1) {
@@ -138,18 +64,61 @@ class GameBoard extends Component {
         } else if (lives === 1) {
           lives = lives - 1;
           let quote = this.choice(this.props.loser);
+          losers += 1;
           return { ...player, lives: lives, gameOver: true, quote: quote };
         }
       }
       return player;
     });
-    // if (losers.length === this.state.game.length - 1) {
-    //   this.winner(id);
-    // }
-    this.setState({ game: down }, (id, lives) => {
-      this.loser(id, lives);
+
+    this.setState(
+      { game: down, losers: this.state.losers + losers },
+      (id, lives) => {
+        this.isGameOver(id, lives);
+      }
+    );
+  }
+
+  isGameOver() {
+    console.log(`preGameOver ${JSON.stringify(this.state)}`);
+    console.log(`loserLength ${this.state.losers.length}`);
+    if (
+      parseInt(this.state.losers.length) === parseInt(this.state.game.length)
+    ) {
+      this.winner();
+    }
+  }
+
+  winner(id) {
+    console.log(`preWinner ${JSON.stringify(this.state)}`);
+    const game = this.state.game;
+
+    const winnerArr = [];
+    let winner;
+    for (let i = 0; i < game.length; i++) {
+      if (game[i].gameOver === false) {
+        winnerArr.push(game[i].id);
+        winner = winnerArr[0];
+        console.log(`winner ${JSON.stringify(winnerArr)}`);
+        console.log(`gameID ${JSON.stringify(game[i].id)}`);
+      }
+    }
+    console.log(`Postwinner ${JSON.stringify(winner)}`);
+    console.log(`game ${JSON.stringify(game)}`);
+
+    Object.keys(game).map((p, i) => {
+      console.log(`id ${JSON.stringify(game[i])}`);
+      if (game[i].id === winner) {
+        let quote = this.choice(this.props.winner);
+        let tempState = game;
+        tempState[i].gameOver = true;
+        tempState[i].quote = quote;
+        console.log(`End winner ${JSON.stringify(tempState[i])}`);
+        console.log(`End winner ${JSON.stringify(tempState)}`);
+        this.setState({ game: [...tempState] });
+      }
+      return null;
     });
-    // this.winner(id, lives);
   }
 
   render() {
