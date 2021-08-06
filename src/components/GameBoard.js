@@ -30,10 +30,9 @@ class GameBoard extends Component {
     this.lifeDown = this.lifeDown.bind(this);
   }
 
-  create(playerData) {
+  create(gameData) {
     console.log(`create ${JSON.stringify(this.state)}`);
-    const allPlayers = playerData.allPlayers;
-    this.setState({ game: [...allPlayers] });
+    this.setState(gameData);
   }
 
   choice(arr) {

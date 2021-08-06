@@ -35,7 +35,7 @@ class GameForm extends Component {
       });
     }
     this.props.createGame({
-      allPlayers,
+      game: allPlayers
     });
     this.handleEdit();
   }
