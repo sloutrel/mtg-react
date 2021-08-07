@@ -1,0 +1,45 @@
+.GameForm{
+display: inline-block;
+}
+.submit-div{
+   text-align: center; 
+    margin: 1em;
+}
+.GameForm-submit{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    padding: .25em .5em;
+    border-radius: .25em;
+    background-color: transparent;
+    border: 2px solid #555;
+}
+.GameForm-submit:hover, .GameForm-submit:active{
+    background: radial-gradient(circle, rgba(228, 87, 0, 0.801) 17%, rgba(212,132,21,1) 39%, rgba(255,199,0,1) 100%);
+}
+.GameForm-playerCount{
+    margin: 1em;
+}
+.GameForm-playerCount-input, .GameForm-lifeCount-input{
+    width: 4em;
+    margin-left: .5em;
+}
+.GameForm-edit-button{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 3em;
+    padding: .25em .5em;
+    border-radius: .25em;
+    background-color: transparent;
+    border: 2px solid #555;
+    transform: scale(65%);
+}
+.GameForm-edit-button:hover, .GameForm-edit-button:active{
+    background: radial-gradient(circle, rgba(233, 124, 57, 0.801) 17%, rgb(221, 156, 65) 39%, rgb(240, 208, 93) 100%);;
+}
+.level{
+    font-size: 2em;
+    text-shadow: #e4bb36 1px 0 10px;
+    color: #661616;
+}

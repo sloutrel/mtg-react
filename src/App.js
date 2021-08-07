@@ -6,6 +6,7 @@ function App() {
   return (
     <div className="App">
       <Header />
+      <h1>Only the strong survive</h1>
       <GameBoard />
     </div>
   );

@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import GameForm from "./GameForm";
 import Player from "./Player";
-
 class GameBoard extends Component {
   static defaultProps = {
     loser: [
@@ -28,12 +27,19 @@ class GameBoard extends Component {
     this.create = this.create.bind(this);
     this.lifeUp = this.lifeUp.bind(this);
     this.lifeDown = this.lifeDown.bind(this);
+    this.newGame = this.newGame.bind(this);
   }
 
   create(playerData) {
     console.log(`create ${JSON.stringify(this.state)}`);
     const allPlayers = playerData.allPlayers;
     this.setState({ game: [...allPlayers] });
+  }
+
+  newGame() {
+    this.refs.gameForm.handleEdit();
+    this.refs.gameForm.newGame();
+    this.setState({ game: [], losers: 0, over: !this.state.over });
   }
 
   choice(arr) {
@@ -54,7 +60,6 @@ class GameBoard extends Component {
   }
 
   lifeDown(id, lives) {
-    console.log(`preDown ${JSON.stringify(this.state)}`);
     let losers = "";
     const down = this.state.game.map((player) => {
       if (player.id === id) {
@@ -70,7 +75,6 @@ class GameBoard extends Component {
       }
       return player;
     });
-
     this.setState(
       { game: down, losers: this.state.losers + losers },
       (id, lives) => {
@@ -80,8 +84,6 @@ class GameBoard extends Component {
   }
 
   isGameOver() {
-    console.log(`preGameOver ${JSON.stringify(this.state)}`);
-    console.log(`loserLength ${this.state.losers.length}`);
     if (
       parseInt(this.state.losers.length) === parseInt(this.state.game.length)
     ) {
@@ -90,21 +92,15 @@ class GameBoard extends Component {
   }
 
   winner(id) {
-    console.log(`preWinner ${JSON.stringify(this.state)}`);
     const game = this.state.game;
-
     const winnerArr = [];
     let winner;
     for (let i = 0; i < game.length; i++) {
       if (game[i].gameOver === false) {
         winnerArr.push(game[i].id);
         winner = winnerArr[0];
-        console.log(`winner ${JSON.stringify(winnerArr)}`);
-        console.log(`gameID ${JSON.stringify(game[i].id)}`);
       }
     }
-    console.log(`Postwinner ${JSON.stringify(winner)}`);
-    console.log(`game ${JSON.stringify(game)}`);
 
     Object.keys(game).map((p, i) => {
       console.log(`id ${JSON.stringify(game[i])}`);
@@ -113,45 +109,47 @@ class GameBoard extends Component {
         let tempState = game;
         tempState[i].gameOver = true;
         tempState[i].quote = quote;
-        console.log(`End winner ${JSON.stringify(tempState[i])}`);
-        console.log(`End winner ${JSON.stringify(tempState)}`);
+        tempState[i].winner = true;
         this.setState({ game: [...tempState] });
       }
-      return null;
+      console.log(game);
+      return this.gameIsOver();
     });
+  }
+
+  gameIsOver() {
+    this.setState({ over: true });
   }
 
   render() {
     const players = this.state.game.map((player) => {
       return (
-        <Player
-          key={player.id}
-          id={player.id}
-          name={player.name}
-          lives={player.lives}
-          quote={player.quote}
-          gameOver={player.gameOver}
-          playerUp={this.lifeUp}
-          playerDown={this.lifeDown}
-        />
+        <div className="col-md-4 col-sm-6 col-lg-3">
+          <Player
+            key={player.id}
+            id={player.id}
+            name={player.name}
+            lives={player.lives}
+            quote={player.quote}
+            winner={player.winner}
+            gameOver={player.gameOver}
+            playerUp={this.lifeUp}
+            playerDown={this.lifeDown}
+          />
+        </div>
       );
     });
-
+    let newGame;
+    if (this.state.over) {
+      newGame = <button onClick={this.newGame}>Rematch</button>;
+    }
     return (
       <div>
-        <GameForm createGame={this.create} level={this.props.difficulty} />
-
-        <div className="Players">{players}</div>
-        <button>Rematch</button>
-        <button>New Battle</button>
-        <a
-          href="https://media.wizards.com/2021/downloads/MagicCompRules%2020210712.pdf"
-          target="_blank"
-          rel="noreferrer"
-          className="GameBoard-rulebook"
-        >
-          CONSULT THE RULEBOOK
-        </a>
+        <GameForm ref="gameForm" createGame={this.create} />
+        <div className="container">
+          <div className="row justify-content-center">{players}</div>
+        </div>
+        <div>{newGame}</div>
       </div>
     );
   }

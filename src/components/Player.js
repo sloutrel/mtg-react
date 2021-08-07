@@ -26,24 +26,42 @@ class Player extends Component {
   render() {
     let result;
     if (this.props.gameOver) {
-      result = (
-        <div>
-          <h1>{`Player ${this.props.name}`}</h1>
-          <div>Lives: {this.props.lives}</div>
-          <h2 className="loser">{this.props.quote}</h2>
-        </div>
-      );
+      if (this.props.winner) {
+        result = (
+          <div className="Player">
+            <h1>{`Player ${this.props.name}`}</h1>
+            <div>Lives: {this.props.lives}</div>
+            <h2 className="winner">{this.props.quote}</h2>
+          </div>
+        );
+      } else {
+        result = (
+          <div className="Player">
+            <h1>{`Player ${this.props.name}`}</h1>
+            <div>Lives: {this.props.lives}</div>
+            <h2 className="loser">{this.props.quote}</h2>
+          </div>
+        );
+      }
     } else {
       result = (
-        <div>
+        <div className="Player">
           <h1>{`Player ${this.props.name}`}</h1>
           <div>Lives: {this.props.lives}</div>
-          <button onClick={this.handleLifeUp}>+</button>
-          <button onClick={this.handleLifeDown}>-</button>
+          <button className="button-plus" onClick={this.handleLifeUp}>
+            +
+          </button>
+          <button className="button-minus" onClick={this.handleLifeDown}>
+            -
+          </button>
         </div>
       );
     }
-    return result;
+    return (
+      <div className="Player-div">
+        <div className="Player-card">{result}</div>
+      </div>
+    );
   }
 }
 

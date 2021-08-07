@@ -1,4 +1,36 @@
 .loser{
-    color: #f00;
-    text-transform: capitalize;
+    color: #c72222;
+    font-size: 1.35em;
+    overflow-wrap: break-word;
+}
+.winner{
+    color: #24aa88;
+    font-size: 1.35em;
+    overflow-wrap: break-word;
+}
+.Player-card{
+    border: 1px solid #555;
+    border-radius: .25em;
+    padding: 1.5em;
+    margin: 1em auto;
+    width: max-content;
+    background-color: #e8ebea;
+}
+.button-plus, .button-minus{
+    border-radius: .25em;
+    background-color: #f6f6f6;
+    border: 2px solid #555;
+    width: 3.5em;
+    height: 3em;
+    margin: .5em;
+}
+.button-plus:hover, .button-plus:active{
+    background: radial-gradient(circle, rgba(36,170,147,1) 27%, rgba(126,209,200,1) 66%, rgba(165,232,215,1) 99%, rgba(36,170,136,1) 100%);
+}
+.button-minus:hover, .button-minus:active{
+    background: radial-gradient(circle, rgba(199,34,34,1) 27%, rgba(221,123,62,1) 68%, rgba(237,195,137,1) 100%);
+}
+.button-plus:active, .button-minus:active{
+    color: #FFF;
+    border-color: #FFF;
 }

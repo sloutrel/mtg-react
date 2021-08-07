@@ -1,0 +1,19 @@
+img {
+    display: block;
+}
+.Header{
+    position: relative;
+    display: inline-block;
+}
+.Header-rulebook{
+    position: absolute;
+    top: 10%;
+    left: 20%;
+    transform: translate(-50%, -50%);
+    text-align: left;
+    float: left;
+    display: block;
+    font-size: 2vw;
+    margin-top: .4vh;
+}
+
